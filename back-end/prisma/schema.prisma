@@ -12,3 +12,8 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model Categoria {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  descricao String 
+}
