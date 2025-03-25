@@ -15,4 +15,7 @@ app.use(cookieParser())
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 
+
+import categoriasRouter from './routes/categorias.js'
+app.use('/categorias', categoriasRouter)
 export default app
