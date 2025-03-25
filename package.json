@@ -1,0 +1,22 @@
+{
+  "name": "bn-dsm-2025-1",
+  "version": "1.0.0",
+  "description": "**OBS.: este procedimento é IMPRESCINDÍVEL para que, posteriormente, o aluno possa entregar o Trabalho 1 da disciplina.**",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pauloricardo1808/bn-dsm-2025-1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pauloricardo1808/bn-dsm-2025-1/issues"
+  },
+  "homepage": "https://github.com/Pauloricardo1808/bn-dsm-2025-1#readme"
+}
