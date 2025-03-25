@@ -6,7 +6,7 @@ controller.create = async function(req, res) {
     /*Conecta-se ao BD e envia uma instrução de criação de um novo documento,
     contendo os dados que vieram dentro do req.body */ 
     try {
-        prisma.categoria.create({ data: req.body })
+       await prisma.categoria.create({ data: req.body })
 
         // Envia uma mensagem de sucesso ao ftont-end
         //HTTP 201: Created
