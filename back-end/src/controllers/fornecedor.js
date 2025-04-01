@@ -1,87 +1,82 @@
 import prisma from "../database/client.js"
-
 const controller = {}
 
 controller.create = async function (req, res) {
     try {
-        const categoria = await prisma.categoria.create({
+        const fornecedor = await prisma.fornecedor.create({
             data: req.body
         })
         res.status(201).json({
-            message: "Categoria criada com sucesso",
-            data: categoria
+            message: "Fornecedor criado com sucesso",
+            data: fornecedor
         })
     }
     catch (error) {
         console.error(error)
         res.status(500).json({
-            message: "Erro ao criar nova categoria: " + error.message
+            message: "Erro ao criar novo fornecedor: " + error.message
         })
     }
 }
 
 controller.retrieveAll = async function (req, res) {
     try {
-        const categorias = await prisma.categoria.findMany({
+        const fornecedores = await prisma.fornecedor.findMany({
             orderBy: {
-                descricao: 'asc'
+                razao_social: 'asc'
             }
         })
-        res.status(200).json(categorias)
+        res.status(200).json(fornecedores)
     }
-
     catch (error) {
         console.error(error)
         res.status(500).json({
-            message: "Erro ao buscar categorias: " + error.message
+            message: "Erro ao buscar fornecedores: " + error.message
         })
     }
 }
 
 controller.retrieveOne = async function (req, res) {
     try {
-        const categoria = await prisma.categoria.findUnique({
+        const fornecedor = await prisma.fornecedor.findUnique({
             where: { id: req.params.id }
         })
 
-        if (!categoria) {
+        if (!fornecedor) {
             return res.status(404).json({
-                message: "Categoria não encontrada"
+                message: "Fornecedor não encontrado"
             })
         }
 
-        res.status(200).json(categoria)
+        res.status(200).json(fornecedor)
     }
     catch (error) {
         console.error(error)
         res.status(500).json({
-            message: "Erro ao buscar categoria: " + error.message
+            message: "Erro ao buscar fornecedor: " + error.message
         })
     }
 }
 
 controller.update = async function (req, res) {
     try {
-        const categoria = await prisma.categoria.update({
+        const fornecedor = await prisma.fornecedor.update({
             where: { id: req.params.id },
             data: req.body
         })
-        res.status(200).json({
-            message: "Categoria atualizada com sucesso",
-            data: categoria
-        })
+        res.status(200).json(fornecedor)
     }
     catch (error) {
         console.error(error)
         res.status(500).json({
-            message: "Erro ao atualizar categoria: " + error.message
+            message: "Erro ao atualizar fornecedor: " + error.message
         })
     }
 }
 
 controller.delete = async function (req, res) {
     try {
-        await prisma.categoria.delete({
+        await prisma.fornecedor.delete({
             where: { id: req.params.id }
         })
 
@@ -97,6 +92,5 @@ controller.delete = async function (req, res) {
         }
     }
 }
-
 
 export default controller
