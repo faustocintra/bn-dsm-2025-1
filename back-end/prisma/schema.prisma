@@ -17,3 +17,19 @@ model categoria {//Nomes de model com inicial Maiúscula e no singular
   id         String       @id @default(auto()) @map("_id") @db.ObjectId
   descricao   String
   }
+
+model Fornecedores {//Nomes de model com inicial Maiúscula e no singular
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  razao_social   String
+  nome_fantasia  String?
+  cnpj           String     @unique
+  email          String     @unique
+  logradouro     String
+  num_casa       String
+  complemento    String?
+  bairro         String
+  municipio      String
+  uf             String
+  cep            String
+  celular        String
+  }
