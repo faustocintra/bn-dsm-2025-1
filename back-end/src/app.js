@@ -17,6 +17,9 @@ app.use('/', indexRouter)
 app.use('/users', usersRouter)
 
 import categoriasRouter from './routes/categorias.js'
+import fornecedoresRouter from './routes/fornecedores.js'
+
+app.use('/fornecedores', fornecedoresRouter)
 
 app.use('/categorias',categoriasRouter)
 
