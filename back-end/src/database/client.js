@@ -1,6 +1,6 @@
 import {PrismaClient} from '@prisma/client'
 
-const prima = new PrismaClient({
+const prisma = new PrismaClient({
     //Habilita a exibicao dos comandos do BD no console
     log: [{
         emit: 'event',
@@ -15,4 +15,4 @@ prisma.$on('query', event => {
     if(event.params) console.log('PARAMS', event.params)
 })
 
-export default prima
+export default prisma
