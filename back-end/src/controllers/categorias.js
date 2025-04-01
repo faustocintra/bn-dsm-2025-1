@@ -99,4 +99,32 @@ controller.update = async function(req, res) {
   }
 }
 
+controller.delete = async function(req, res) {
+  try {
+    // Busca o documento a ser excluído pelo id passado
+    // como parâmetro e efetua a exclusão, caso encontrado
+    await prisma.categoria.delete({
+      where: { id: req.params.id }
+    })
+
+    // Encontrou e excluiu ~> retorna HTTP 204: No Content
+    res.status(204).end()
+  }
+  catch(error) {
+    // P2025: erro do Prisma referente a objeto não encontrado
+    if(error?.code === 'P2025') {
+      // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
+      res.status(404).end()
+    }
+    else {    // Outros tipos de erro
+      // Deu errado: exibe o erro no terminal
+      console.error(error)
+
+      // Envia o erro ao front-end, com status de erro
+      // HTTP 500: Internal Server Error
+      res.status(500).send(error)
+    }
+  }
+}
+
 export default controller
