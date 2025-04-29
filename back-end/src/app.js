@@ -23,4 +23,11 @@ app.use('/categorias', categoriasRouter)
 import fornecedoresRouter from './routes/fornecedores.js'
 app.use('/fornecedores', fornecedoresRouter)
 
+import produtosRouter from './routes/produtos.js'
+app.use('/produtos', produtosRouter)
+
+import clienteRouter from './routes/cliente.js'
+app.use('/cliente', clienteRouter)
+
+
 export default app
