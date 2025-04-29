@@ -13,24 +13,58 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Categoria {   // Nomes de model com Inicial Maiúscula e no singular
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+model Categoria {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   descricao   String
+  produtos    Produto[] // Um-para-muitos (não precisa mexer)
 }
 
-
-model Fornecedor {   
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  razao_social  String 
-  nome_fantasia String?
-  cnpj          String    @unique
-  email         String    @unique
-  logradouro    String
-  num_casa      String
-  complemento   String?
-  bairro        String
-  municipio     String
-  uf            String
-  cep           String
-  celular       String 
+model Produto {
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  nome            String
+  marca           String
+  detalhes        String?
+  quantidade      Float
+  unidade_medida  String
+  preco_unitario  Float
+  qtd_estoque     Float
+  categoria_id    String     @db.ObjectId
+  categoria       Categoria  @relation(fields: [categoria_id], references: [id])
+  
+  fornecedor_ids  String[]   @db.ObjectId  
 }
+
+model Fornecedor {
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  razao_social    String
+  nome_fantasia   String?
+  cnpj            String     @unique
+  email           String     @unique
+  logradouro      String
+  num_casa        String
+  complemento     String?
+  bairro          String
+  municipio       String
+  uf              String
+  cep             String
+  celular         String
+
+  produto_ids     String[]   @db.ObjectId  
+}
+
+model Cliente {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  nome              String
+  cpf               String      @unique   // Não pode repetir no cadastro
+  data_nascimento   DateTime?
+  email             String      @unique
+  logradouro        String
+  num_casa          String
+  complemento       String?
+  bairro            String
+  municipio         String
+  uf                String
+  cep               String
+  celular           String
+}
+
