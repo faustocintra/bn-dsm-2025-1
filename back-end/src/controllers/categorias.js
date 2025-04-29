@@ -1,4 +1,5 @@
 import prisma from '../database/client.js'
+import { includeRelations } from  '../lib/utils.js'
 
 const controller = {}  //objeto vazio
 
@@ -25,8 +26,11 @@ controller.create = async function(req, res) {
 
 controller.retrieveAll = async function(req, res) {
     try {
+
+      const include = includeRelations(req.query)
       // Manda buscar os dados no servidor de BD
       const result = await prisma.categoria.findMany({
+        include,
         orderBy: [ { descricao: 'asc' } ]
       })
   
@@ -46,9 +50,12 @@ controller.retrieveAll = async function(req, res) {
 
 controller.retrieveOne = async function (req, res) {
   try {
+
+    const include = includeRelations(req.query)
     //Manda buscar o documento no servidor de BD usando como critério de busca um id informado
     //no parâmetro de requisição
     const result = await prisma.categoria.findUnique({
+      include,
       where: { id: req.params.id }
     })
     //Encontrou o documento -> retorno HTTP 200: OK (implícito)
