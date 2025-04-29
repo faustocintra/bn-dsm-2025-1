@@ -5,86 +5,85 @@ const controller = {}
 
 controller.create = async function (req, res) {
     try {
-        const categoria = await prisma.categoria.create({
+        const produto = await prisma.produto.create({
             data: req.body
         })
         res.status(201).json({
-            message: "Categoria criada com sucesso",
-            data: categoria
+            message: "Produto criado com sucesso",
+            data: produto
         })
     }
     catch (error) {
         console.error(error)
         res.status(500).json({
-            message: "Erro ao criar nova categoria: " + error.message
+            message: "Erro ao criar novo produto: " + error.message
         })
     }
 }
 
 controller.retrieveAll = async function (req, res) {
     try {
-        const categorias = await prisma.categoria.findMany({
+        const produtos = await prisma.produto.findMany({
             orderBy: {
-                descricao: 'asc'
+                nome: 'asc'
             },
             include: includeRelations(req.query)
         })
-        res.status(200).json(categorias)
+        res.status(200).json(produtos)
     }
 
     catch (error) {
         console.error(error)
         res.status(500).json({
-            message: "Erro ao buscar categorias: " + error.message
+            message: "Erro ao buscar produtos: " + error.message
         })
     }
 }
 
 controller.retrieveOne = async function (req, res) {
     try {
-        const categoria = await prisma.categoria.findUnique({
+        const produto = await prisma.produto.findUnique({
             where: { id: req.params.id },
             include: includeRelations(req.query)
         })
-
-        if (!categoria) {
+        if (!produto) {
             return res.status(404).json({
-                message: "Categoria não encontrada"
+                message: "Produto não encontrado"
             })
         }
 
-        res.status(200).json(categoria)
+        res.status(200).json(produto)
     }
     catch (error) {
         console.error(error)
         res.status(500).json({
-            message: "Erro ao buscar categoria: " + error.message
+            message: "Erro ao buscar produto: " + error.message
         })
     }
 }
 
 controller.update = async function (req, res) {
     try {
-        const categoria = await prisma.categoria.update({
+        const produto = await prisma.produto.update({
             where: { id: req.params.id },
             data: req.body
         })
         res.status(200).json({
-            message: "Categoria atualizada com sucesso",
-            data: categoria
+            message: "Produto atualizado com sucesso",
+            data: produto
         })
     }
     catch (error) {
         console.error(error)
         res.status(500).json({
-            message: "Erro ao atualizar categoria: " + error.message
+            message: "Erro ao atualizar produto: " + error.message
         })
     }
 }
 
 controller.delete = async function (req, res) {
     try {
-        await prisma.categoria.delete({
+        await prisma.produto.delete({
             where: { id: req.params.id }
         })
 
