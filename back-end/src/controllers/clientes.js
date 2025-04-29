@@ -1,5 +1,4 @@
 import prisma from '../database/client.js'
-import { includeRelations } from '../lib/utils.js'
 
 const controller = {}   // Objeto vazio
 
@@ -9,7 +8,7 @@ controller.create = async function(req, res) {
      dentro de req.body
   */
   try {
-    await prisma.fornecedor.create({ data: req.body })
+    await prisma.clientes.create({ data: req.body })
 
     // Envia uma mensagem de sucesso ao front-end
     // HTTP 201: Created
@@ -18,7 +17,7 @@ controller.create = async function(req, res) {
   catch(error) {
     // Deu errado: exibe o erro no terminal
     console.error(error)
-
+	
     // Envia o erro ao front-end, com status de erro
     // HTTP 500: Internal Server Error
     res.status(500).send(error)
@@ -27,13 +26,9 @@ controller.create = async function(req, res) {
 
 controller.retrieveAll = async function(req, res) {
   try {
-
-    const include = includeRelations(req.query)
-
     // Manda buscar os dados no servidor de BD
-    const result = await prisma.fornecedor.findMany({
-      include,
-      orderBy: [ { razao_social: 'asc' } ]
+    const result = await prisma.clientes.findMany({
+      orderBy: [ { nome: 'asc' } ]
     })
 
     // Retorna os dados obtidos ao cliente com o status
@@ -52,14 +47,10 @@ controller.retrieveAll = async function(req, res) {
 
 controller.retrieveOne = async function(req, res) {
   try {
-
-    const include = includeRelations(req.query)
-
     // Manda buscar o documento no servidor de BD
     // usando como critério de busca um id informado
     // no parâmetro da requisição
-    const result = await prisma.fornecedor.findUnique({
-      include,
+    const result = await prisma.clientes.findUnique({
       where: { id: req.params.id }
     })
 
@@ -83,7 +74,7 @@ controller.update = async function(req, res) {
     // Busca o documento pelo id passado como parâmetro e,
     // caso o documento seja encontrado, atualiza-o com as
     // informações passadas em req.body
-    await prisma.fornecedor.update({
+    await prisma.clientes.update({
       where: { id: req.params.id },
       data: req.body
     })
@@ -112,7 +103,7 @@ controller.delete = async function(req, res) {
   try {
     // Busca o documento a ser excluído pelo id passado
     // como parâmetro e efetua a exclusão, caso encontrado
-    await prisma.fornecedor.delete({
+    await prisma.clientes.delete({
       where: { id: req.params.id }
     })
 
