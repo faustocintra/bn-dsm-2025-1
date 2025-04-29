@@ -1,8 +1,9 @@
 import prisma from '../database/client.js'
+import { includeRelations } from '../database/lib/utils.js'
 
 const controller = {}   // Objeto vazio
 
-controller.create = async function(req, res) {
+controller.create = async function (req, res) {
   /* Conecta-se ao BD e envia uma instrução de criação
      de um novo documento, contendo os dados que vieram
      dentro de req.body
@@ -14,7 +15,7 @@ controller.create = async function(req, res) {
     // HTTP 201: Created
     res.status(201).end()
   }
-  catch(error) {
+  catch (error) {
     // Deu errado: exibe o erro no terminal
     console.error(error)
 
@@ -24,18 +25,22 @@ controller.create = async function(req, res) {
   }
 }
 
-controller.orderBy = async function(req, res) {
+controller.retrieveAll = async function (req, res) {
   try {
+
+    const include = includeRelations(req.query)
+
     // Manda buscar os dados no servidor de BD
     const result = await prisma.fornecedor.findMany({
-      orderBy: [ { descricao: 'asc' } ]
+      include,
+      orderBy: [{ razao_social: 'asc' }]
     })
 
     // Retorna os dados obtidos ao cliente com o status
     // HTTP 200: OK (implícito)
     res.send(result)
   }
-  catch(error) {
+  catch (error) {
     // Deu errado: exibe o erro no terminal
     console.error(error)
 
@@ -45,21 +50,25 @@ controller.orderBy = async function(req, res) {
   }
 }
 
-controller.retrieveOne = async function(req, res) {
+controller.retrieveOne = async function (req, res) {
   try {
+
+    const include = includeRelations(req.query)
+
     // Manda buscar o documento no servidor de BD
     // usando como critério de busca um id informado
     // no parâmetro da requisição
     const result = await prisma.fornecedor.findUnique({
+      include,
       where: { id: req.params.id }
     })
 
     // Encontrou o documento ~> retorna HTTP 200: OK (implícito)
-    if(result) res.send(result)
+    if (result) res.send(result)
     // Não encontrou o documento ~> retorna HTTP 404: Not Found
     else res.status(404).end()
   }
-  catch(error) {
+  catch (error) {
     // Deu errado: exibe o erro no terminal
     console.error(error)
 
@@ -69,7 +78,7 @@ controller.retrieveOne = async function(req, res) {
   }
 }
 
-controller.update = async function(req, res) {
+controller.update = async function (req, res) {
   try {
     // Busca o documento pelo id passado como parâmetro e,
     // caso o documento seja encontrado, atualiza-o com as
@@ -82,9 +91,9 @@ controller.update = async function(req, res) {
     // Encontrou e atualizou ~> retorna HTTP 204: No Content
     res.status(204).end()
   }
-  catch(error) {
+  catch (error) {
     // P2025: erro do Prisma referente a objeto não encontrado
-    if(error?.code === 'P2025') {
+    if (error?.code === 'P2025') {
       // Não encontrou e não alterou ~> retorna HTTP 404: Not Found
       res.status(404).end()
     }
@@ -99,7 +108,7 @@ controller.update = async function(req, res) {
   }
 }
 
-controller.delete = async function(req, res) {
+controller.delete = async function (req, res) {
   try {
     // Busca o documento a ser excluído pelo id passado
     // como parâmetro e efetua a exclusão, caso encontrado
@@ -110,9 +119,9 @@ controller.delete = async function(req, res) {
     // Encontrou e excluiu ~> retorna HTTP 204: No Content
     res.status(204).end()
   }
-  catch(error) {
+  catch (error) {
     // P2025: erro do Prisma referente a objeto não encontrado
-    if(error?.code === 'P2025') {
+    if (error?.code === 'P2025') {
       // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
       res.status(404).end()
     }
