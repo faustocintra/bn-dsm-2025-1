@@ -26,10 +26,13 @@ controller.create = async function(req, res) {
 
 controller.retrieveAll = async function(req, res) {
   try {
+
+    const include = includeRelations(req.query)
     // Manda buscar os dados no servidor de BD
     const result = await prisma.fornecedor.findMany({
+      include,
       orderBy: [ { cnpj: 'asc' } ]
-    })
+    })  
 
     // Retorna os dados obtidos ao cliente com o status
     // HTTP 200: OK (implícito)
