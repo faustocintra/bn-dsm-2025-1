@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client';
 // Instância do PrismaClient
 const prisma = new PrismaClient();
 
+
 const controller = {};   // Objeto vazio
 
 controller.create = async function(req, res) {

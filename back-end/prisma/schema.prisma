@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,23 +7,57 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model categoria {//Nomes de model com inicial Maiúscula e no singular
-  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+model Categoria {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
   descricao   String
-  }
+  produtos    Produto[] // relação inversa opcional, se quiser
+}
 
-model Fornecedores {//Nomes de model com inicial Maiúscula e no singular
-  id         String       @id @default(auto()) @map("_id") @db.ObjectId
-  razao_social   String
-  nome_fantasia  String?
-  cnpj           String     @unique
-  email          String     @unique
-  logradouro     String
-  num_casa       String
-  complemento    String?
-  bairro         String
-  municipio      String
-  uf             String
-  cep            String
-  celular        String
-  }
+model Fornecedor {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  razao_social  String
+  nome_fantasia String?
+  cnpj          String    @unique
+  email         String    @unique
+  logradouro    String
+  num_casa      String
+  complemento   String?
+  bairro        String
+  municipio     String
+  uf            String
+  cep           String
+  celular       String
+  produtos      Produto[]
+}
+
+
+model Produto {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  nome            String
+  marca           String
+  detalhes        String?
+  quantidade      Float
+  unidade_medida  String
+  preco_unitario  Float
+  qtd_estoque     Float?
+  categoria_id    String      @db.ObjectId
+  categoria       Categoria   @relation(fields: [categoria_id], references: [id])
+  fornecedor_id   String      @db.ObjectId
+  fornecedor      Fornecedor  @relation(fields: [fornecedor_id], references: [id])
+}
+
+model Cliente {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  nome              String
+  cpf               String      @unique   // Não pode repetir no cadastro
+  data_nascimento   DateTime?
+  email             String      @unique
+  logradouro        String
+  num_casa          String
+  complemento       String?
+  bairro            String
+  municipio         String
+  uf                String
+  cep               String
+  celular           String
+}
