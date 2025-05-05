@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {Router} from 'express'
 import controller from '../controllers/categorias.js'
  
@@ -11,3 +12,17 @@ router.delete('/:id', controller.delete)
  
 export default router
  
+=======
+import { Router } from 'express'
+import controller from '../controllers/categorias.js'
+
+const router = Router()
+
+router.post('/', controller.create)
+router.get('/', controller.retrieveAll)
+router.get('/:id', controller.retrieveOne)
+router.put('/:id', controller.update)
+router.delete('/:id', controller.delete)
+
+export default router
+>>>>>>> upstream/main

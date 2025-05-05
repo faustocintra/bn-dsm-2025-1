@@ -18,3 +18,34 @@
 
 Siga as instruções [deste artigo](https://faustocintra.com.br/desenvolvimento-back-end/criando-um-projeto-express-js-em-2024/).
 
+# Alternando para a pasta do projeto back-end
+
+No terminal:
+`cd back-end`
+
+# Executando o projeto back-end
+
+No terminal, na pasta `back-end`:
+`npm run dev`
+
+# Instalando a biblioteca Prisma
+
+No terminal, na pasta `back-end`:
+
+`npm install prisma --save-dev`
+
+# Inicialização do Prisma
+
+No terminal, na pasta `back-end`:
+
+`npx prisma init --datasource-provider mongodb`
+
+# URI para conexão ao MongoDB local (com _replica set_ habilitado)
+
+`mongodb://127.0.0.1:27017/loja?directConnection=true`
+
+# (Re)criação do Prisma Client
+
+Toda vez que o arquivo `schema.prisma` é modificado, é necessário executar o seguinte comando no terminal, na pasta `back-end`:
+
+`npx prisma generate`

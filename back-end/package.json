@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "express-app",
+=======
+  "name": "back-end",
+>>>>>>> upstream/main
   "version": "0.0.1",
   "private": true,
   "scripts": {
