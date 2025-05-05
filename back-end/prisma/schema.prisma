@@ -6,14 +6,10 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
-}
-
-model Categoria {   // Nomes de model com Inicial Maiúscula e no singular
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  descricao   String
 }
