@@ -27,11 +27,11 @@ controller.create = async function(req, res) {
 
 controller.retrieveAll = async function(req, res) {
   try {
-    
+
     const include = includeRelations(req.query)
 
     console.log({include})
-    
+
     // Manda buscar os dados no servidor de BD
     const result = await prisma.produto.findMany({
       include,
@@ -54,10 +54,14 @@ controller.retrieveAll = async function(req, res) {
 
 controller.retrieveOne = async function(req, res) {
   try {
+
+    const include = includeRelations(req.query)
+
     // Manda buscar o documento no servidor de BD
     // usando como critério de busca um id informado
     // no parâmetro da requisição
     const result = await prisma.produto.findUnique({
+      include,
       where: { id: req.params.id }
     })
 
