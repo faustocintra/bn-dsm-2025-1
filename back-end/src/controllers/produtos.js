@@ -135,6 +135,75 @@ controller.delete = async function(req, res) {
       // HTTP 500: Internal Server Error
       res.status(500).send(error)
     }
+    controller.createItem = async function(req,res){
+      try{
+      // adiciona no corpo da requisição o item do pedido,
+      // passado como parâmetro na rota
+      req.body.pedido_id = req.params.id
+
+      await prisma.itemVenda.create({data:req.body})
+
+      //Envia uma mensagem de sucesso ao front-end
+      //HTTP 201: Created
+      res.status(201).end()
+      }
+      catch(error){
+        //Deu errado: exibe no terminal
+        console.error(error)
+
+        //envia o erro ao front-end, com status de erro
+        //HTTP 500: Internal server errorr
+        res.status(500).send(error)
+      }
+    }
+
+    controller.retrieveAllItems = async function(req,res){
+      try{
+        const include = includeRelations(req.query)
+
+        const result = await prisma.itemVenda.findMany({
+          where: { pedido_id: req.params.id},
+          orderBy: [{ num_item: 'asc '}],
+          include
+        })
+        //HTTP 200: OK
+        res.send(result)
+      }
+      catch(error){
+        //Deu errado: exibe no terminal
+        console.error(error)
+
+        //envia o erro ao front-end, com status de erro
+        //HTTP 500: Internal server errorr
+        res.status(500).send(error)
+      }
+    }
+    controller.retrieveOneItem = async function(req, res){
+      try{
+        /*
+          A rigor, o item do pedido poderia ser encontrado apenas pelo seu id.
+          No entanto, para forçar a necessidade de um item ao pedido correspondente,
+          a busca é feita usando-se tanto o id do item quanto o id do pedido.
+        */
+       const result = await prisma.itemVenda.findFirst({
+        where: {
+          id: req.params.itemId,
+          pedido_id : req.params.id
+        }
+       })
+       if(result) res.send(result)
+       // Não encontrou -> HTTP 404: Not Found
+      else res.status(404).end()
+      }
+      catch(error){
+        //Deu errado: exibe no terminal
+        console.error(error)
+
+        //envia o erro ao front-end, com status de erro
+        //HTTP 500: Internal server errorr
+        res.status(500).send(error)
+      }
+    }
   }
 }
 
