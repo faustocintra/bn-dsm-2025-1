@@ -13,56 +13,78 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Categoria {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  descricao   String
-  produtos    String[]   @db.ObjectId  // Apenas IDs dos produtos relacionados
+model Categoria {   // Nomes de model com Inicial Maiúscula e no singular
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  descricao         String
+  produtos          Produto[]
+}
 
-  Produto Produto[]
+model Cliente {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  nome              String
+  cpf               String      @unique   // Não pode repetir no cadastro
+  data_nascimento   DateTime?
+  email             String      @unique
+  logradouro        String
+  num_casa          String
+  complemento       String?
+  bairro            String
+  municipio         String
+  uf                String
+  cep               String
+  celular           String
+  pedidos           Pedido[]
+}
+
+model Fornecedor {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  razao_social      String
+  nome_fantasia     String?
+  cnpj              String        @unique
+  email             String        @unique
+  logradouro        String
+  num_casa          String
+  complemento       String?
+  bairro            String
+  municipio         String
+  uf                String
+  cep               String
+  celular           String
+  produtos          Produto[]     @relation(fields: [produto_ids], references: [id])
+  produto_ids       String[]      @db.ObjectId
+}
+
+model ItemPedido {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  num_item          Int
+  quantidade        Float
+  produto_id        String        @db.ObjectId
+  produto           Produto       @relation(fields: [produto_id], references: [id])
+  pedido_id         String        @db.ObjectId
+  pedido            Pedido        @relation(fields: [pedido_id], references: [id])
+}
+
+model Pedido {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  num_pedido        Int           @unique
+  data_hora         DateTime      @default(now())
+  cliente_id        String        @db.ObjectId
+  cliente           Cliente       @relation(fields: [cliente_id], references: [id])
+  itens             ItemPedido[]
 }
 
 model Produto {
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
-  nome            String
-  marca           String
-  detalhes        String?
-  quantidade      Float
-  unidade_medida  String
-  preco_unitario  Float
-  qtd_estoque     Float
-  categoria_id    String      @db.ObjectId 
-  categoria       Categoria   @relation(fields:[categoria_id], references:[id])
-  fornecedor_ids  String[]    @db.ObjectId 
-}
-
-model Fornecedores {
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
-  razao_social    String
-  nome_fantasia   String?
-  cnpj            String      @unique
-  email           String      @unique
-  logradouro      String
-  num_casa        String
-  complemento     String?
-  bairro          String
-  municipio       String
-  uf              String
-  cep             String
-  celular         String
-  produto_ids     String[]    @db.ObjectId 
-}
-
-model cliente {
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
-  nome            String
-  cpf            String      @unique
-  email           String      @unique
-  logradouro      String
-  num_casa        String
-  complemento     String?
-  bairro          String
-  municipio       String
-  uf              String
-  cep             String
-  celular         String
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  nome              String
+  marca             String
+  detalhes          String?
+  quantidade        Float
+  unidade_medida    String
+  preco_unitario    Float
+  qtd_estoque       Float
+  categoria_id      String        @db.ObjectId
+  categoria         Categoria     @relation(fields: [categoria_id], references: [id])
+  fornecedores      Fornecedor[]  @relation(fields: [fornecedor_ids], references: [id])
+  fornecedor_ids    String[]      @db.ObjectId
+  itens_pedido      ItemPedido[]
 }
