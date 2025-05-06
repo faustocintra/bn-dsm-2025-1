@@ -1,13 +1,14 @@
 import prisma from '../database/client.js'
 import { includeRelations } from '../lib/utils.js'
 
-const controller = {}   // Objeto vazio
+const controller = {}; // Objeto vazio
 
-controller.create = async function(req, res) {
+controller.create = async function (req, res) {
   /* Conecta-se ao BD e envia uma instrução de criação
      de um novo documento, contendo os dados que vieram
      dentro de req.body
   */
+
   try {
     await prisma.categoria.create({ data: req.body })
 
