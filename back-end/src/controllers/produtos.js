@@ -9,7 +9,7 @@ controller.create = async function(req, res) {
      dentro de req.body
   */
   try {
-    await prisma.produtos.create({ data: req.body })
+    await prisma.produto.create({ data: req.body })
 
     // Envia uma mensagem de sucesso ao front-end
     // HTTP 201: Created
@@ -28,11 +28,13 @@ controller.create = async function(req, res) {
 controller.retrieveAll = async function(req, res) {
   try {
 
-    const include = includeRelations(req.res)
+    const include = includeRelations(req.query)
 
     console.log({include})
+
     // Manda buscar os dados no servidor de BD
-    const result = await prisma.produtos.findMany({
+    const result = await prisma.produto.findMany({
+      include,
       orderBy: [ { nome: 'asc' } ]
     })
 
@@ -53,12 +55,12 @@ controller.retrieveAll = async function(req, res) {
 controller.retrieveOne = async function(req, res) {
   try {
 
-    const include = includeRelations(reqquery)
+    const include = includeRelations(req.query)
 
     // Manda buscar o documento no servidor de BD
     // usando como critério de busca um id informado
     // no parâmetro da requisição
-    const result = await prisma.produtos.findUnique({
+    const result = await prisma.produto.findUnique({
       include,
       where: { id: req.params.id }
     })
@@ -83,7 +85,7 @@ controller.update = async function(req, res) {
     // Busca o documento pelo id passado como parâmetro e,
     // caso o documento seja encontrado, atualiza-o com as
     // informações passadas em req.body
-    await prisma.produtos.update({
+    await prisma.produto.update({
       where: { id: req.params.id },
       data: req.body
     })
@@ -112,7 +114,7 @@ controller.delete = async function(req, res) {
   try {
     // Busca o documento a ser excluído pelo id passado
     // como parâmetro e efetua a exclusão, caso encontrado
-    await prisma.produtos.delete({
+    await prisma.produto.delete({
       where: { id: req.params.id }
     })
 
@@ -135,5 +137,6 @@ controller.delete = async function(req, res) {
     }
   }
 }
+
 
 export default controller
