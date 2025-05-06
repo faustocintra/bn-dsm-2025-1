@@ -28,5 +28,9 @@ import clientesRouter from './routes/clientes.js'
 app.use('/clientes', clientesRouter)
 
 
+import pedidoRouter from './routes/pedido.js'
+app.use('/pedido', pedidoRouter)
+
+
 
 export default app
