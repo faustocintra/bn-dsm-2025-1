@@ -3,6 +3,7 @@ import controller from '../controllers/produtos.js'
 
 const router = Router()
 
+// Produtos
 router.post('/', controller.create)
 router.get('/', controller.retrieveAll)
 router.get('/:id', controller.retrieveOne)

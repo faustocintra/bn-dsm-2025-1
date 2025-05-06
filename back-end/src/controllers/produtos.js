@@ -1,5 +1,5 @@
 import prisma from '../database/client.js'
-import includeRelations from '../lib/utils.js';
+import includeRelations from '../lib/utils.js'
 
 const controller = {}   // Objeto vazio
 
@@ -28,7 +28,9 @@ controller.create = async function(req, res) {
 controller.retrieveAll = async function(req, res) {
   try {
 
-    const include = includeRelations(req.query);
+    const include = includeRelations(req.query)
+
+    console.log({include})
 
     // Manda buscar os dados no servidor de BD
     const result = await prisma.produto.findMany({
@@ -53,7 +55,7 @@ controller.retrieveAll = async function(req, res) {
 controller.retrieveOne = async function(req, res) {
   try {
 
-    const include = includeRelations(req.query);
+    const include = includeRelations(req.query)
 
     // Manda buscar o documento no servidor de BD
     // usando como critério de busca um id informado
@@ -94,7 +96,7 @@ controller.update = async function(req, res) {
   catch(error) {
     // P2025: erro do Prisma referente a objeto não encontrado
     if(error?.code === 'P2025') {
-      // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
+      // Não encontrou e não alterou ~> retorna HTTP 404: Not Found
       res.status(404).end()
     }
     else {    // Outros tipos de erro
