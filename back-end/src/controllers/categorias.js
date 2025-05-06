@@ -102,7 +102,7 @@ controller.update = async function(req, res) {
 controller.delete = async function(req, res) {
   try {
     // Busca o documento a ser excluído pelo id passado
-    // como parâmetro e efetua a exclusão, caso encontrado
+    // como parâmetro e efetua a exclusão, caso encontrados
     await prisma.categoria.delete({
       where: { id: req.params.id }
     })
