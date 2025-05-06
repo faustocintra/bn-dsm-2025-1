@@ -20,5 +20,9 @@ import categoriasRouter from './routes/categorias.js'
 app.use('/categorias', categoriasRouter)
 import fornecedoresRouter from './routes/fornecedores.js' 
 app.use('/fornecedores', fornecedoresRouter)  
+import produtosRouter from './routes/produtos.js' 
+app.use('/produtos', produtosRouter)
+import pedidosRouter from './routes/pedidos.js' 
+app.use('/pedidos', pedidosRouter)
 
 export default app
