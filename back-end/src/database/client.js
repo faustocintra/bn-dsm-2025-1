@@ -1,15 +1,15 @@
-import {PrismaClient} from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient({
-    // Permite exibir comandos no terminal
-    log:[{
+    //Habilita a exibição dos comandos do BD no console
+    log: [{
         emit: 'event',
-        level:'query'
+        level: 'query'
     }]
 })
 
-prisma.$on('query', event =>{
-    // Personaliza como vai aparecer no terminal
+prisma.$on('query', event => {
+    //Personaliza a forma como a instrução do BD será exibida no console
     console.log('-'.repeat(40))
     console.log(event.query)
     if(event.params) console.log('PARAMS:', event.params)

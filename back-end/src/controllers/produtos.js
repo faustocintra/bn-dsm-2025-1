@@ -7,7 +7,7 @@ controller.create = async function(req, res) {
     /*Conecta-se ao BD e envia uma instrução de criação de um novo documento,
     contendo os dados que vieram dentro do req.body */ 
     try {
-       await prisma.fornecedor.create({ data: req.body })
+       await prisma.produto.create({ data: req.body })
 
         // Envia uma mensagem de sucesso ao front-end
         //HTTP 201: Created
@@ -29,9 +29,9 @@ controller.retrieveAll = async function(req, res) {
 
       const include = includeRelations(req.query)
       // Manda buscar os dados no servidor de BD
-      const result = await prisma.fornecedor.findMany({
+      const result = await prisma.produto.findMany({
         include,
-        orderBy: [ { razao_social: 'asc' } ]
+        orderBy: [ { nome: 'asc' } ]
       })
   
       // Retorna os dados obtidos ao cliente com o status
@@ -52,9 +52,11 @@ controller.retrieveOne = async function (req, res) {
   try {
 
     const include = includeRelations(req.query)
+
+
     //Manda buscar o documento no servidor de BD usando como critério de busca um id informado
     //no parâmetro de requisição
-    const result = await prisma.fornecedor.findUnique({
+    const result = await prisma.produto.findUnique({
       include,
       where: { id: req.params.id }
     })
@@ -78,7 +80,7 @@ controller.update = async function(req, res) {
     // Busca o documento pelo id passado como parâmetro e,
     // caso o documento seja encontrado, atualiza-o com as
     // informações passadas em req.body
-    await prisma.fornecedor.update({
+    await prisma.produto.update({
       where: { id: req.params.id },
       data: req.body
     })
@@ -107,7 +109,7 @@ controller.delete = async function(req, res) {
   try {
     // Busca o documento a ser excluído pelo id passado
     // como parâmetro e efetua a exclusão, caso encontrado
-    await prisma.fornecedor.delete({
+    await prisma.produto.delete({
       where: { id: req.params.id }
     })
 
@@ -129,7 +131,8 @@ controller.delete = async function(req, res) {
       res.status(500).send(error)
     }
   }
-}
 
+  
+}
 
 export default controller
