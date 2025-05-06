@@ -30,7 +30,7 @@ controller.retrieveAll = async function(req, res) {
 
     const include = includeRelations(req.query)
 
-    console.log({include})
+    console.log(include)
 
     // Manda buscar os dados no servidor de BD
     const result = await prisma.produto.findMany({
