@@ -33,6 +33,7 @@ model Cliente {
   uf              String
   cep             String
   celular         String
+  pedidos         Pedido[]
 }
 
 model Fornecedor {
@@ -53,6 +54,30 @@ model Fornecedor {
   produto_ids     String[]    @db.ObjectId
 }
 
+model ItemPedido {
+    id              String        @id @default(auto()) @map("_id") @db.ObjectId
+    num_item        Int
+    quantidade      Float
+    produto_id      String        @db.ObjectId
+    produto         Produto       @relation(fields: [produto_id], references: [id])
+    pedido_id       String        @db.ObjectId
+    pedido          Pedido        @relation(fields: [pedido_id], references: [id])
+
+    //Indice único nos campos pedido_id e num_item para 
+    //impedir a repetição do npumero do item dentro do mesmo pedido
+    @@unique([pedido_id, num_item])
+}
+
+model Pedido {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  num_pedido      Int           @unique
+  data_hora       DateTime      @default(now())
+  cliente_id      String        @db.ObjectId
+  cliente         Cliente       @relation(fields: [cliente_id], references: [id])
+  itens           ItemPedido[]
+}
+
+
 model Produto {
   id              String        @id @default(auto()) @map("_id") @db.ObjectId
   nome            String
@@ -66,4 +91,5 @@ model Produto {
   categoria       Categoria     @relation(fields: [categoria_id], references: [id])
   fornecedores    Fornecedor[]  @relation(fields: [fornecedor_ids], references: [id])
   fornecedor_ids  String[]      @db.ObjectId
+  itens_pedido    ItemPedido[]
 }
