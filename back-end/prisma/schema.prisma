@@ -62,7 +62,6 @@ model ItemPedido {
   produto           Produto       @relation(fields: [produto_id], references: [id])
   pedido_id         String        @db.ObjectId
   pedido            Pedido        @relation(fields: [pedido_id], references: [id])
-
   // Índice único nos campos pedido_id e num_item para impedir
   // a repetição do número do item dentro do mesmo pedido
   @@unique([pedido_id, num_item])

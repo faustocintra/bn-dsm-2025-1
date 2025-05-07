@@ -5,7 +5,6 @@
   devem ser incluídos na consulta sendo executada
 */
 function includeRelations(query) {
-
   // Por padrão, não inclui nenhum relacionamento
   const include = {}
 
