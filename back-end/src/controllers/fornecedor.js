@@ -67,7 +67,7 @@ controller.update = async function (req, res) {
             where: { id: req.params.id },
             data: req.body
         })
-        res.status(200).json(fornecedor)
+        res.status(204).end()
     }
     catch (error) {
         console.error(error)
