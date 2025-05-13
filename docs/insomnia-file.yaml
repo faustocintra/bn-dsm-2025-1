@@ -1,0 +1,730 @@
+type: collection.insomnia.rest/5.0
+name: My Collection
+meta:
+  id: wrk_73b2035a5ccf4ee0b82a0ba3ee3cd2c4
+  created: 1743459557579
+  modified: 1743459557579
+collection:
+  - name: Categorias
+    meta:
+      id: fld_e5d2b30b22dc48fea2f7592076685c86
+      created: 1743459563973
+      modified: 1743459563973
+      sortKey: -1743459563974
+    children:
+      - url: "{{ _.APIUrl }}/categorias?include=Produto"
+        name: Buscar Categorias
+        meta:
+          id: req_aac09bb4709b4333b3086cf4f25736f8
+          created: 1743459680395
+          modified: 1745885962304
+          isPrivate: false
+          sortKey: -1743459680395
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/categorias"
+        name: Criar Categorias
+        meta:
+          id: req_f120b24f2cef45d6be7bc7a1b266ad61
+          created: 1743459784893
+          modified: 1743459829701
+          isPrivate: false
+          sortKey: -1743241215538
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"descricao": "Cama, Mesa e Banho"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/categorias/67e1ffeac83bbc18de0a6bae"
+        name: Criar Categorias por ID
+        meta:
+          id: req_59b9384832b5411caaf43b39f0a2a948
+          created: 1743460664125
+          modified: 1743462982508
+          isPrivate: false
+          sortKey: -1743350447966.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/categorias/67e1ffeac83bbc18de0a6bae"
+        name: Atualizar Categorias por ID
+        meta:
+          id: req_b5830ee1755f47e1acac3dbd86bbc30c
+          created: 1743462975402
+          modified: 1743463011516
+          isPrivate: false
+          sortKey: -1743241215438
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"descricao": "Alimentação e Bebidas"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/categorias/67e1ffeac83bbc18de0a6bae"
+        name: Deletar Categorias por ID
+        meta:
+          id: req_0b5f28aea6f1424c941cb39597a33554
+          created: 1743465679018
+          modified: 1743465683734
+          isPrivate: false
+          sortKey: -1743131983059.5
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Fornecedores
+    meta:
+      id: fld_ebb4c8baee914617a7e4250e75f18dbb
+      created: 1743466605288
+      modified: 1743466605288
+      sortKey: -1743241154186.5
+    children:
+      - url: "{{ _.APIUrl }}/fornecedores?include=produtos"
+        name: Buscar Fornecedores
+        meta:
+          id: req_9ed9456d7f7b42139661bf88dce7f048
+          created: 1743466605289
+          modified: 1747090664657
+          isPrivate: false
+          sortKey: -1743459680395
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/fornecedores"
+        name: Criar Fornecedores
+        meta:
+          id: req_8ab883cc8acd449cba6bbde57509a01b
+          created: 1743466605291
+          modified: 1743466709628
+          isPrivate: false
+          sortKey: -1743241215538
+        method: POST
+        body:
+          mimeType: application/json
+          text: |
+            {
+              "razao_social": "Empresa Exemplo Ltda",
+              "nome_fantasia": "Exemplo Comércio",
+              "cnpj": "12.345.678/0001-90",
+              "email": "contato@exemplo.com",
+              "logradouro": "Rua das Flores",
+              "num_casa": "123",
+              "complemento": "Sala 4",
+              "bairro": "Centro",
+              "municipio": "São Paulo",
+              "uf": "SP",
+              "cep": "01000-000",
+              "celular": "(11) 98765-4321"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/fornecedores/67eb3468cf3dd20cdc13dd45"
+        name: Criar Fornecedores por ID
+        meta:
+          id: req_8b9e1c3f8ff8407cb24292faab89923e
+          created: 1743466605293
+          modified: 1743467632159
+          isPrivate: false
+          sortKey: -1743350447966.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/fornecedores/68227fc16295cd3cdc5c46f1"
+        name: Atualizar Fornecedores por ID
+        meta:
+          id: req_21d9afa5d7874ac483c07889385aaff2
+          created: 1743466605294
+          modified: 1747091398954
+          isPrivate: false
+          sortKey: -1743241215438
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |
+            {
+              "razao_social": "Empresa Pessoni LTDA",
+              "nome_fantasia": "Empresa Pessoni",
+              "cnpj": "98.345.678/0001-90",
+              "email": "contato@exemplo.com",
+              "logradouro": "Rua das Flores",
+              "num_casa": "123",
+              "complemento": "Sala 4",
+              "bairro": "Centro",
+              "municipio": "São Paulo",
+              "uf": "SP",
+              "cep": "01000-000",
+              "celular": "(11) 98765-4321"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/fornecedores/67eb3468cf3dd20cdc13dd45"
+        name: Deletar Fornecedores por ID
+        meta:
+          id: req_27526398794a4c0fab4e60237a05295c
+          created: 1743466605297
+          modified: 1743467636955
+          isPrivate: false
+          sortKey: -1743131983059.5
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Produtos
+    meta:
+      id: fld_dea05cdc527449fd805ffb7fd6eeb20c
+      created: 1745880386383
+      modified: 1745880386383
+      sortKey: -1743131949292.75
+    children:
+      - url: "{{ _.APIUrl }}/produtos?include=categoria,fornecedores"
+        name: Buscar Produtos
+        meta:
+          id: req_e609b06d062e483182a78798df9fd9c6
+          created: 1745880386384
+          modified: 1747091611712
+          isPrivate: false
+          sortKey: -1743459680395
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/produtos"
+        name: Criar Produtos
+        meta:
+          id: req_2fdeaa226f304c27aa0f3da2e4d7b193
+          created: 1745880386386
+          modified: 1747090702007
+          isPrivate: false
+          sortKey: -1743241215538
+        method: POST
+        body:
+          mimeType: application/json
+          text: >
+            {
+              "nome": "Monitor LG UltraGear",
+              "marca": "LG",
+              "detalhes": "Monitor Gamer LG UltraGear 27'' IPS 1ms 144Hz Full HD",
+              "quantidade": 1,
+              "unidade_medida": "UN",
+              "preco_unitario": 1899.90,
+              "qtd_estoque": 15,
+              "categoria_id": "67eb15f6b3aab534ad40de3a",
+              "fornecedor_ids": ["67eb30fbf49fd4bdcc80b8b6"]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/fornecedores/67eb3468cf3dd20cdc13dd45"
+        name: Criar Produtos por ID
+        meta:
+          id: req_0b41b5277f144fc8b9627a16bd5978a7
+          created: 1745880386388
+          modified: 1745880418470
+          isPrivate: false
+          sortKey: -1743350447966.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/produtos/682287e4f06e9913d4754e7e"
+        name: Atualizar Produtos por ID
+        meta:
+          id: req_e8ff710499454325b56f970f041756da
+          created: 1745880386389
+          modified: 1747093525259
+          isPrivate: false
+          sortKey: -1743241215438
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "nome": "Notebook Dell Edição",
+                "marca": "Dell",
+                "detalhes": "Notebook Dell Inspiron 20, 16GB RAM, SSD 512GB",
+                "quantidade": 1,
+                "unidade_medida": "UN",
+                "preco_unitario": 4999.99,
+                "qtd_estoque": 10
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/produtos/68100cfc3ab2c6bc0a20be0e"
+        name: Deletar Produtos por ID
+        meta:
+          id: req_555f6cc80fe540299c1187c070077e85
+          created: 1745880386391
+          modified: 1747093401170
+          isPrivate: false
+          sortKey: -1743131983059.5
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Clientes
+    meta:
+      id: fld_7fdd2bf7ba2649b7bcbfa5b48dd44702
+      created: 1747089663547
+      modified: 1747089663547
+      sortKey: -1743186551739.625
+    children:
+      - url: "{{ _.APIUrl }}/clientes?include=pedidos"
+        name: Buscar Clientes
+        meta:
+          id: req_9032a7b3707840c39d9a9e7581bdbd4e
+          created: 1747089663550
+          modified: 1747094300002
+          isPrivate: false
+          sortKey: -1743459680395
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/clientes"
+        name: Criar Clientes
+        meta:
+          id: req_0b61adee0d464a27806d63bc64689185
+          created: 1747089663554
+          modified: 1747094240609
+          isPrivate: false
+          sortKey: -1743241215538
+        method: POST
+        body:
+          mimeType: application/json
+          text: |
+            {
+              "nome": "Fausto Cintra",
+              "cpf": "322.456.789-00",
+              "data_nascimento": "2003-05-12T00:00:00.000Z",
+              "email": "gabriel.pessoni@example.com",
+              "logradouro": "Rua das Flores",
+              "num_casa": "123",
+              "complemento": "Apartamento 45",
+              "bairro": "Centro",
+              "municipio": "Franca",
+              "uf": "SP",
+              "cep": "14400-000",
+              "celular": "(16) 91234-5678"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/fornecedores/67eb3468cf3dd20cdc13dd45"
+        name: Criar Clientes por ID
+        meta:
+          id: req_9d436b47f3ce486cb15eeeda9ca7f370
+          created: 1747089663556
+          modified: 1747089708525
+          isPrivate: false
+          sortKey: -1743350447966.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/clientes/682287e1f06e9913d4754e7d"
+        name: Atualizar Clientes por ID
+        meta:
+          id: req_5f211ec4424b4195a222bcee1e656ed8
+          created: 1747089663559
+          modified: 1747093894692
+          isPrivate: false
+          sortKey: -1743241215438
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |
+            {
+              "nome": "Gabriel Pessoni",
+              "cpf": "123.456.789-00",
+              "data_nascimento": "2003-05-12T00:00:00.000Z",
+              "email": "gabriel.pessoni@example.com",
+              "logradouro": "Rua das Flores",
+              "num_casa": "123",
+              "complemento": "Apartamento 45",
+              "bairro": "Centro",
+              "municipio": "Franca",
+              "uf": "SP",
+              "cep": "14400-000",
+              "celular": "(16) 91234-5678"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/clientes/682287e1f06e9913d4754e7d"
+        name: Deletar Clientes por ID
+        meta:
+          id: req_a2c2be78fe584b779d7e1969f3dcd73f
+          created: 1747089663563
+          modified: 1747093936088
+          isPrivate: false
+          sortKey: -1743131983059.5
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Pedidos
+    meta:
+      id: fld_765dac4d676146268f79fa7cf0a2172b
+      created: 1747093980238
+      modified: 1747093980238
+      sortKey: -1743159250516.1875
+    children:
+      - url: "{{ _.APIUrl }}/pedidos?include=itens.produto,cliente"
+        name: Buscar Pedidos
+        meta:
+          id: req_c00905a45b8449dda21aa56d006fcc27
+          created: 1747093980239
+          modified: 1747094421454
+          isPrivate: false
+          sortKey: -1743459680395
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/pedidos"
+        name: Criar Pedido
+        meta:
+          id: req_980d2f13a7b942bcabd41eb9fbf49db1
+          created: 1747093980241
+          modified: 1747094870512
+          isPrivate: false
+          sortKey: -1743241215538
+        method: POST
+        body:
+          mimeType: application/json
+          text: |
+            {
+              "num_pedido": 1001,
+              "cliente_id": "682288924bf66c454c7b6866",
+              "itens": [
+                {
+                  "num_item": 1,
+                  "quantidade": 2,
+                  "produto_id": "68227b2a8582d84c99a31d55"
+                },
+                {
+                  "num_item": 2,
+                  "quantidade": 1,
+                  "produto_id": "68100d570b82e77e1496e0b4"
+                }
+              ]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/fornecedores/67eb3468cf3dd20cdc13dd45"
+        name: Criar Pedidos por ID
+        meta:
+          id: req_bf9606ac05054f81bf7ce53866fdaa80
+          created: 1747093980242
+          modified: 1747094004828
+          isPrivate: false
+          sortKey: -1743350447966.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl
+          }}/pedidos/68228ab14bf66c454c7b6867/itens/68228ab14bf66c454c7b6868"
+        name: Adicionar Item ao Pedido por ID
+        meta:
+          id: req_a62e202818e243658e87eb9661b68494
+          created: 1747093980243
+          modified: 1747095082906
+          isPrivate: false
+          sortKey: -1743241215438
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                  "num_item": 1,
+                  "quantidade": 30
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/pedidos/68228c614bf66c454c7b686f"
+        name: Deletar Pedido por ID
+        meta:
+          id: req_29554caa38ef4bdfae318b95b3450ea5
+          created: 1747093980245
+          modified: 1747094634970
+          isPrivate: false
+          sortKey: -1743131983059.5
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.APIUrl }}/pedidos/68228c614bf66c454c7b686f"
+        name: Adicionar Item ao Pedido
+        meta:
+          id: req_1dd267303d794372b25e3fd755b2f85b
+          created: 1747094705386
+          modified: 1747094705386
+          isPrivate: false
+          sortKey: -1743077366870.25
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.0.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_534f084962c91eec2a935e4c34bd8e1321fa1ec1
+    created: 1743459557594
+    modified: 1743459557594
+environments:
+  name: Base Environment
+  meta:
+    id: env_534f084962c91eec2a935e4c34bd8e1321fa1ec1
+    created: 1743459557583
+    modified: 1743459765982
+    isPrivate: false
+  data:
+    APIUrl: http://localhost:8080
