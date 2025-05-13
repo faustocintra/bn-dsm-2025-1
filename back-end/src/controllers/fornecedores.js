@@ -1,4 +1,4 @@
-import prisma from '../database/client.js'
+import prisma from '../../database/client.js'
 import { includeRelations } from '../lib/utils.js'
 
 const controller = {}   // Objeto vazio
