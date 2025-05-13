@@ -64,7 +64,7 @@ model ItemPedido {
   pedido            Pedido        @relation(fields: [pedido_id], references: [id])
 
   // Índice único nos campos pedido_id e num_item para impedir
-  //a repetição do número do item dentro do mesmo pedido
+  // a repetição do número do item dentro do mesmo pedido
   @@unique([pedido_id, num_item])
 }
 

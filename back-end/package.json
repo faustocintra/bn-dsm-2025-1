@@ -1,5 +1,5 @@
 {
-  "name": "express-app",
+  "name": "back-end",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "eslint": "^9.8.0",
-    "nodemon": "^3.1.9",
+    "nodemon": "^3.1.4",
     "prettier": "^3.3.3",
     "prisma": "^6.5.0"
   },

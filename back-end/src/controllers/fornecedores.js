@@ -1,31 +1,43 @@
 import prisma from '../database/client.js'
-import { includeRelations } from '../database/lib/utils.js'
+import { includeRelations } from '../lib/utils.js'
 
 const controller = {}   // Objeto vazio
 
-controller.create = async function (req, res) {
-  /* Conecta-se ao BD e envia uma instrução de criação
-     de um novo documento, contendo os dados que vieram
-     dentro de req.body
-  */
+controller.create = async function(req, res) {
   try {
-    await prisma.fornecedor.create({ data: req.body })
+    // Cria o fornecedor
+    const novoFornecedor = await prisma.fornecedor.create({ 
+      data: req.body,
+      include: {
+        produtos: true
+      }
+    })
 
-    // Envia uma mensagem de sucesso ao front-end
-    // HTTP 201: Created
+    // Se houver produtos associados, atualiza cada um deles
+    if(req.body.produto_ids?.length > 0) {
+      await Promise.all(
+        req.body.produto_ids.map(produtoId =>
+          prisma.produto.update({
+            where: { id: produtoId },
+            data: {
+              fornecedor_ids: {
+                push: novoFornecedor.id
+              }
+            }
+          })
+        )
+      )
+    }
+
     res.status(201).end()
   }
-  catch (error) {
-    // Deu errado: exibe o erro no terminal
+  catch(error) {
     console.error(error)
-
-    // Envia o erro ao front-end, com status de erro
-    // HTTP 500: Internal Server Error
     res.status(500).send(error)
   }
 }
 
-controller.retrieveAll = async function (req, res) {
+controller.retrieveAll = async function(req, res) {
   try {
 
     const include = includeRelations(req.query)
@@ -33,14 +45,14 @@ controller.retrieveAll = async function (req, res) {
     // Manda buscar os dados no servidor de BD
     const result = await prisma.fornecedor.findMany({
       include,
-      orderBy: [{ razao_social: 'asc' }]
+      orderBy: [ { razao_social: 'asc' } ]
     })
 
     // Retorna os dados obtidos ao cliente com o status
     // HTTP 200: OK (implícito)
     res.send(result)
   }
-  catch (error) {
+  catch(error) {
     // Deu errado: exibe o erro no terminal
     console.error(error)
 
@@ -50,7 +62,7 @@ controller.retrieveAll = async function (req, res) {
   }
 }
 
-controller.retrieveOne = async function (req, res) {
+controller.retrieveOne = async function(req, res) {
   try {
 
     const include = includeRelations(req.query)
@@ -64,11 +76,11 @@ controller.retrieveOne = async function (req, res) {
     })
 
     // Encontrou o documento ~> retorna HTTP 200: OK (implícito)
-    if (result) res.send(result)
+    if(result) res.send(result)
     // Não encontrou o documento ~> retorna HTTP 404: Not Found
     else res.status(404).end()
   }
-  catch (error) {
+  catch(error) {
     // Deu errado: exibe o erro no terminal
     console.error(error)
 
@@ -78,37 +90,52 @@ controller.retrieveOne = async function (req, res) {
   }
 }
 
-controller.update = async function (req, res) {
+controller.update = async function(req, res) {
   try {
-    // Busca o documento pelo id passado como parâmetro e,
-    // caso o documento seja encontrado, atualiza-o com as
-    // informações passadas em req.body
-    await prisma.fornecedor.update({
-      where: { id: req.params.id },
-      data: req.body
-    })
+    // Se houver produto_ids no body da requisição
+    if(req.body.produto_ids) {
+      // Primeiro, atualiza o fornecedor
+      const updatedFornecedor = await prisma.fornecedor.update({
+        where: { id: req.params.id },
+        data: req.body,
+        include: { produtos: true }
+      })
 
-    // Encontrou e atualizou ~> retorna HTTP 204: No Content
+      // Depois, atualiza todos os produtos relacionados
+      await Promise.all(
+        req.body.produto_ids.map(produtoId =>
+          prisma.produto.update({
+            where: { id: produtoId },
+            data: {
+              fornecedor_ids: {
+                push: req.params.id
+              }
+            }
+          })
+        )
+      )
+    } else {
+      // Se não houver produto_ids, apenas atualiza o fornecedor normalmente
+      await prisma.fornecedor.update({
+        where: { id: req.params.id },
+        data: req.body
+      })
+    }
+
     res.status(204).end()
   }
-  catch (error) {
-    // P2025: erro do Prisma referente a objeto não encontrado
-    if (error?.code === 'P2025') {
-      // Não encontrou e não alterou ~> retorna HTTP 404: Not Found
+  catch(error) {
+    if(error?.code === 'P2025') {
       res.status(404).end()
     }
-    else {    // Outros tipos de erro
-      // Deu errado: exibe o erro no terminal
+    else {
       console.error(error)
-
-      // Envia o erro ao front-end, com status de erro
-      // HTTP 500: Internal Server Error
       res.status(500).send(error)
     }
   }
 }
 
-controller.delete = async function (req, res) {
+controller.delete = async function(req, res) {
   try {
     // Busca o documento a ser excluído pelo id passado
     // como parâmetro e efetua a exclusão, caso encontrado
@@ -119,9 +146,9 @@ controller.delete = async function (req, res) {
     // Encontrou e excluiu ~> retorna HTTP 204: No Content
     res.status(204).end()
   }
-  catch (error) {
+  catch(error) {
     // P2025: erro do Prisma referente a objeto não encontrado
-    if (error?.code === 'P2025') {
+    if(error?.code === 'P2025') {
       // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
       res.status(404).end()
     }
