@@ -6,6 +6,8 @@
 */
 function includeRelations(query) {
 
+ 
+
     // Por padrão, não inclui nenhum relacionamento
     const include = {}
   
@@ -18,12 +20,12 @@ function includeRelations(query) {
       // Preenche a const "include" com as relações informadas
       for(let rel of relations) {
         // Include de 2º nível (único caso nesta aplicação)
-      if (relations.include('itens.produto')) {
+      if (relations.includes('itens.produto')) {
         include.itens = {
           include:{ produto:true}
         }
       }
-      else inclue [rel] = true  
+      else include [rel] = true  
       }
       
     }

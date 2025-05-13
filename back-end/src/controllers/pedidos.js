@@ -1,3 +1,4 @@
+
 import prisma from '../database/client.js'
 import { includeRelations } from '../lib/utils.js'
 
@@ -144,7 +145,7 @@ controller.createItem = async function(req, res) {
     // passada como parâmetro na rota
     req.body.pedido_id = req.params.id
 
-    await prisma.ItemPedido.create({ data: req.body })
+    await prisma.itemPedido.create({ data: req.body })
 
     // Envia uma mensagem de sucesso ao front-end
     // HTTP 201: Created
@@ -164,9 +165,9 @@ controller.retrieveAllItems = async function(req, res) {
   try {
     const include = includeRelations(req.query)
 
-    const result = await prisma.ItemPedido.findMany({
+    const result = await prisma.itemPedido.findMany({
       where: { pedido_id: req.params.id },
-      orderBy: [ { num_item: 'asc '} ],
+      orderBy: [ { num_item: 'asc' } ],
       include
     })
 
@@ -190,7 +191,7 @@ controller.retrieveOneItem = async function(req, res) {
       No entanto, para forçar a necessidade de um item ao pedido correspondente,
       a busca é feita usando-se tanto o id do item quanto o id do pedido.
     */
-    const result = await prisma.ItemPedido.findFirst({
+    const result = await prisma.itemPedido.findFirst({
       where: {
         id: req.params.itemId,
         pedido_id: req.params.id
@@ -214,7 +215,7 @@ controller.retrieveOneItem = async function(req, res) {
 
 controller.updateItem = async function(req, res) {
   try {
-    await prisma.ItemPedido.update({
+    await prisma.itemPedido.update({
       where: {
         id: req.params.itemId,
         pedido_id: req.params.id
@@ -245,7 +246,7 @@ controller.updateItem = async function(req, res) {
 
 controller.deleteItem = async function(req, res) {
   try {
-    await prisma.ItemPedido.delete({
+    await prisma.itemPedido.delete({
       where: {
         id: req.params.itemId,
         pedido_id: req.params.id
