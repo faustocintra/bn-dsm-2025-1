@@ -166,7 +166,7 @@ controller.retrieveAllItems = async function(req, res) {
 
     const result = await prisma.itemPedido.findMany({
       where: { pedido_id: req.params.id },
-      orderBy: [ { num_item: 'asc ' } ],
+      orderBy: [ { num_item: 'asc' } ],
       include
     })
 
