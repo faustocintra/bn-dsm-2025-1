@@ -1,3 +1,9 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -57,7 +63,8 @@ model ItemPedido {
   pedido_id         String        @db.ObjectId
   pedido            Pedido        @relation(fields: [pedido_id], references: [id])
 
-  // Indice úniconos campos pedido_id e num_item para evitar a repetição do número do item dentro do mesmo pedido
+  // Índice único nos campos pedido_id e num_item para impedir
+  // a repetição do número do item dentro do mesmo pedido
   @@unique([pedido_id, num_item])
 }
 
