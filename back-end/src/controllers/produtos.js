@@ -28,13 +28,7 @@ controller.retrieveAll = async function (req, res) {
             },
             include: {
                 categoria: true,
-                fornecedor: {
-                    select: {
-                        cnpj: true,
-                        razao_social: true,
-                        email: true,
-                    }
-                }
+                fornecedores: true
             }
         })
         res.status(200).json(produtos)
