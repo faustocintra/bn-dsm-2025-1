@@ -1,3 +1,4 @@
+
 import prisma from '../database/client.js'
 import { includeRelations } from '../lib/util.js'
 
@@ -71,7 +72,7 @@ controller.retrieveOne = async function(req, res) {
   catch(error) {
     // Deu errado: exibe o erro no terminal
     console.error(error)
-
+*
     // Envia o erro ao front-end, com status de erro
     // HTTP 500: Internal Server Error
     res.status(500).send(error)
