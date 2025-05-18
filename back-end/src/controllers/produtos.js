@@ -5,23 +5,23 @@ const controller = {}   // Objeto vazio
 
 controller.create = async function(req, res) {
   try {
-    // Cria o fornecedor
-    const novoFornecedor = await prisma.fornecedor.create({ 
+    // Cria o produto
+    const novoProduto = await prisma.produto.create({ 
       data: req.body,
       include: {
-        produtos: true
+        fornecedores: true
       }
     })
 
-    // Se houver produtos associados, atualiza cada um deles
-    if(req.body.produto_ids?.length > 0) {
+    // Se houver fornecedores associados, atualiza cada um deles
+    if(req.body.fornecedor_ids?.length > 0) {
       await Promise.all(
-        req.body.produto_ids.map(produtoId =>
-          prisma.produto.update({
-            where: { id: produtoId },
+        req.body.fornecedor_ids.map(fornecedorId =>
+          prisma.fornecedor.update({
+            where: { id: fornecedorId },
             data: {
-              fornecedor_ids: {
-                push: novoFornecedor.id
+              produto_ids: {
+                push: novoProduto.id
               }
             }
           })
@@ -42,10 +42,12 @@ controller.retrieveAll = async function(req, res) {
 
     const include = includeRelations(req.query)
 
+    console.log({include})
+
     // Manda buscar os dados no servidor de BD
-    const result = await prisma.fornecedor.findMany({
+    const result = await prisma.produto.findMany({
       include,
-      orderBy: [ { razao_social: 'asc' } ]
+      orderBy: [ { nome: 'asc' } ]
     })
 
     // Retorna os dados obtidos ao cliente com o status
@@ -70,7 +72,7 @@ controller.retrieveOne = async function(req, res) {
     // Manda buscar o documento no servidor de BD
     // usando como critério de busca um id informado
     // no parâmetro da requisição
-    const result = await prisma.fornecedor.findUnique({
+    const result = await prisma.produto.findUnique({
       include,
       where: { id: req.params.id }
     })
@@ -92,22 +94,22 @@ controller.retrieveOne = async function(req, res) {
 
 controller.update = async function(req, res) {
   try {
-    // Se houver produto_ids no body da requisição
-    if(req.body.produto_ids) {
-      // Primeiro, atualiza o fornecedor
-      const updatedFornecedor = await prisma.fornecedor.update({
+    // Se houver fornecedor_ids no body da requisição
+    if(req.body.fornecedor_ids) {
+      // Primeiro, atualiza o produto
+      const updatedProduto = await prisma.produto.update({
         where: { id: req.params.id },
         data: req.body,
-        include: { produtos: true }
+        include: { fornecedores: true }
       })
 
-      // Depois, atualiza todos os produtos relacionados
+      // Depois, atualiza todos os fornecedores relacionados
       await Promise.all(
-        req.body.produto_ids.map(produtoId =>
-          prisma.produto.update({
-            where: { id: produtoId },
+        req.body.fornecedor_ids.map(fornecedorId =>
+          prisma.fornecedor.update({
+            where: { id: fornecedorId },
             data: {
-              fornecedor_ids: {
+              produto_ids: {
                 push: req.params.id
               }
             }
@@ -115,8 +117,8 @@ controller.update = async function(req, res) {
         )
       )
     } else {
-      // Se não houver produto_ids, apenas atualiza o fornecedor normalmente
-      await prisma.fornecedor.update({
+      // Se não houver fornecedor_ids, apenas atualiza o produto normalmente
+      await prisma.produto.update({
         where: { id: req.params.id },
         data: req.body
       })
@@ -139,7 +141,7 @@ controller.delete = async function(req, res) {
   try {
     // Busca o documento a ser excluído pelo id passado
     // como parâmetro e efetua a exclusão, caso encontrado
-    await prisma.fornecedor.delete({
+    await prisma.produto.delete({
       where: { id: req.params.id }
     })
 
