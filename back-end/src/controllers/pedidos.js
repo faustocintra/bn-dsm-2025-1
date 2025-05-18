@@ -1,4 +1,3 @@
-import e from 'express'
 import prisma from '../database/client.js'
 import { includeRelations } from '../lib/utils.js'
  
@@ -10,7 +9,7 @@ controller.create = async function(req, res) {
      dentro de req.body
   */
   try {
-    await prisma.produto.create({ data: req.body })
+    await prisma.pedido.create({ data: req.body })
  
     // Envia uma mensagem de sucesso ao front-end
     // HTTP 201: Created
@@ -27,10 +26,14 @@ controller.create = async function(req, res) {
 }
  
 controller.retrieveAll = async function(req, res) {
+
+  const include = includeRelations(req.query)
+
   try {
     // Manda buscar os dados no servidor de BD
-    const result = await prisma.produto.findMany({
-      orderBy: [ { nome: 'asc' } ]
+    const result = await prisma.pedido.findMany({
+      include,
+      orderBy: [ { num_pedido: 'asc' } ]
     })
  
     // Retorna os dados obtidos ao cliente com o status
@@ -54,7 +57,7 @@ controller.retrieveOne = async function(req, res) {
     // Manda buscar o documento no servidor de BD
     // usando como critério de busca um id informado
     // no parâmetro da requisição
-    const result = await prisma.produto.findUnique({
+    const result = await prisma.pedido.findUnique({
       include,
       where: { id: req.params.id }
     })
@@ -79,7 +82,7 @@ controller.update = async function(req, res) {
     // Busca o documento pelo id passado como parâmetro e,
     // caso o documento seja encontrado, atualiza-o com as
     // informações passadas em req.body
-    await prisma.produto.update({
+    await prisma.pedido.update({
       where: { id: req.params.id },
       data: req.body
     })
@@ -108,7 +111,7 @@ controller.delete = async function(req, res) {
   try {
     // Busca o documento a ser excluído pelo id passado
     // como parâmetro e efetua a exclusão, caso encontrado
-    await prisma.produto.delete({
+    await prisma.pedido.delete({
       where: { id: req.params.id }
     })
  

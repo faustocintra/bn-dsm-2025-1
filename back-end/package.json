@@ -2,6 +2,11 @@
   "name": "express-app",
   "version": "0.0.1",
   "private": true,
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/bin/server.js",
     "start": "node ./src/bin/server.js"
@@ -18,6 +23,5 @@
     "nodemon": "^3.1.4",
     "prettier": "^3.3.3",
     "prisma": "^6.6.0"
-  },
-  "type": "module"
+  }
 }

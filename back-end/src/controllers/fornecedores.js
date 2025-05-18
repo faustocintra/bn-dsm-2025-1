@@ -90,7 +90,7 @@ controller.retrieveOne = async function(req, res) {
   }
 }
  
-ccontroller.update = async function(req, res) {
+controller.update = async function(req, res) {
   try {
     // Se houver produto_ids no body da requisição
     if(req.body.produto_ids) {
