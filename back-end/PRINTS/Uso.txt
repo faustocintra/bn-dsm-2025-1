@@ -1,0 +1,13 @@
+http://localhost:8080
+
+http://localhost:8080/clientes
+
+http://localhost:8080/fornecedores
+
+http://localhost:8080/produtos
+
+http://localhost:8080/pedidos
+
+http://localhost:8080/produtos?include=fornecedores
+
+http://localhost:8080/pedidos?include=itens.produto
