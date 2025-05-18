@@ -1,5 +1,8 @@
 import prisma from '../database/client.js'
+<<<<<<< HEAD
 import { includeRelations } from '../lib/utils.js'
+=======
+>>>>>>> origin/main
 
 const controller = {}   // Objeto vazio
 
@@ -25,6 +28,7 @@ controller.create = async function(req, res) {
   }
 }
 
+<<<<<<< HEAD
 controller.retrieveAll = async function(req, res) {
 
   const include = includeRelations(req.query)
@@ -136,4 +140,6 @@ controller.delete = async function(req, res) {
   }
 }
 
+=======
+>>>>>>> origin/main
 export default controller

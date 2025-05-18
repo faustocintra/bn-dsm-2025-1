@@ -1,9 +1,13 @@
 import prisma from '../database/client.js'
+<<<<<<< HEAD
 import { includeRelations } from '../lib/utils.js'
+=======
+>>>>>>> origin/main
 
 const controller = {}   // Objeto vazio
 
 controller.create = async function(req, res) {
+<<<<<<< HEAD
   try {
     // Cria o produto
     const novoProduto = await prisma.produto.create({ 
@@ -55,6 +59,20 @@ controller.retrieveAll = async function(req, res) {
     res.send(result)
   }
   catch(error) {
+=======
+  /* Conecta-se ao BD e envia uma instrução de criação
+     de um novo documento, contendo os dados que vieram
+     dentro de req.body
+  */
+  try {
+    await prisma.categoria.create({ data: req.body })
+
+    // Envia uma mensagem de sucesso ao front-end
+    // HTTP 201: Created
+    res.status(201).end()
+  }
+  catch(error) {
+>>>>>>> origin/main
     // Deu errado: exibe o erro no terminal
     console.error(error)
 
@@ -64,6 +82,7 @@ controller.retrieveAll = async function(req, res) {
   }
 }
 
+<<<<<<< HEAD
 controller.retrieveOne = async function(req, res) {
   try {
 
@@ -165,4 +184,6 @@ controller.delete = async function(req, res) {
   }
 }
 
+=======
+>>>>>>> origin/main
 export default controller

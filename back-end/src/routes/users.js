@@ -21,4 +21,8 @@ router.delete('/', function (req, res) {
   res.send('Deleted a user')
 })
 
+<<<<<<< HEAD
 export default router
+=======
+export default router
+>>>>>>> origin/main
