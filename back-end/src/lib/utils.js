@@ -4,30 +4,24 @@
   positivo, preenche um objeto com os relacionamentos que
   devem ser incluídos na consulta sendo executada
 */
-function includeRelations(query) {
+export function includeRelations(query) {
+  if (!query.include) return {}
 
-  // Por padrão, não inclui nenhum relacionamento
+  const includes = query.include.split(',')
+
   const include = {}
 
-  // Se o parâmetro "include" estiver na query string
-  if(query.include) {
-    // Recorta o valor do parâmetro, separando os
-    // relacionamentos informados onde há vírgula
-    const relations = query.include.split(',')
-
-    // Preenche a const "include" com as relações informadas
-    for(let rel of relations) {
-      // Include de 2º nível (único caso nesta aplicação)
-      if(rel === 'itens.produto') {
-        include.itens = {
-          include: { produto: true }
-        }
-      }
-      else include[rel] = true
+  for (const rel of includes) {
+    if (rel === 'cliente') {
+      include.cliente = true
+    }
+    if (rel === 'itens') {
+      include.itens = true
+    }
+    if (rel === 'itens.produto') {
+      include.itens = { include: { produto: true } }
     }
   }
 
   return include
 }
-
-export { includeRelations }
