@@ -15,8 +15,7 @@ app.use(cookieParser())
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 
-/***************** ROTAS ***********************/
-
+// Rotas principais
 import categoriasRouter from './routes/categorias.js'
 app.use('/categorias', categoriasRouter)
 
