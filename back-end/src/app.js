@@ -1,4 +1,4 @@
-import express, { json, Router, urlencoded } from 'express'
+import express, { json, urlencoded } from 'express'
 import cookieParser from 'cookie-parser'
 import logger from 'morgan'
 
@@ -15,19 +15,20 @@ app.use(cookieParser())
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
 
-
-/********************* Rotas *****************/
-
-import categoriasRouter from './routes/categorias.js'
+// **********************ROTAS********************** \\
+import categoriasRouter from './routes/categoria.js'
 app.use('/categorias', categoriasRouter)
 
-import fornecedoresRouter from './routes/fornecedores.js'
-app.use('/fornecedores', fornecedoresRouter)
+import fornecedoresRouter from './routes/fornecedor.js'
+app.use('/fornecedor', fornecedoresRouter)
 
-import produtosRouter from './routes/produtos.js'
-app.use('/produtos', produtosRouter)
+import produtosRouter from './routes/produto.js'
+app.use('/produto', produtosRouter)
 
 import clienteRouter from './routes/cliente.js'
-app.use('/clientes', clienteRouter)
+app.use('/cliente', clienteRouter)
+
+import pedidosRouter from './routes/pedidos.js'
+app.use('/pedidos', pedidosRouter)
 
 export default app

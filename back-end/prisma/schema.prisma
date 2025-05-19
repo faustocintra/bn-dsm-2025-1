@@ -30,6 +30,7 @@ model Cliente {
   pedidos           Pedido[]
 }
 
+
 model Fornecedor {
   id                String        @id @default(auto()) @map("_id") @db.ObjectId
   razao_social      String
@@ -58,7 +59,7 @@ model ItemPedido {
   pedido            Pedido        @relation(fields: [pedido_id], references: [id])
 
   //indice unico para não permitir o mesmo produto no mesmo pedido
-  @@unique[pedido_id, num_iditem]
+  @@unique([pedido_id, num_item])
 }
 
 model Pedido {

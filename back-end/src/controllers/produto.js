@@ -1,7 +1,7 @@
 import prisma from '../database/client.js'
 import { includeRelations } from '../lib/utils.js'
 
-const controller = {}   // Objeto vazio
+const controller = {}
 
 controller.create = async function(req, res) {
   try {
@@ -39,55 +39,87 @@ controller.create = async function(req, res) {
 
 controller.retrieveAll = async function(req, res) {
   try {
-
+    // 1) pego todas as flags/includes que o usuário pediu
     const include = includeRelations(req.query)
+    // 2) separo as flags internas (_fornecedor, _categoria) dos includes válidos
+    const { _fornecedor, _categoria, ...prismaInclude } = include
 
-    console.log({include})
-
-    // Manda buscar os dados no servidor de BD
-    const result = await prisma.produto.findMany({
-      include,
-      orderBy: [ { nome: 'asc' } ]
+    // 3) busco produtos com *apenas* os includes que o Prisma conhece
+    const produtos = await prisma.produto.findMany({
+      include: prismaInclude,
+      orderBy: [{ nome: 'asc' }]
     })
 
-    // Retorna os dados obtidos ao cliente com o status
-    // HTTP 200: OK (implícito)
-    res.send(result)
-  }
-  catch(error) {
-    // Deu errado: exibe o erro no terminal
-    console.error(error)
+    // 4) se pediu categoria, carrego todas de uma vez
+    let categoriaMap = {}
+    if (_categoria) {
+      const idsCat = Array.from(new Set(produtos.map(p => p.categoria_id)))
+      const categorias = await prisma.categoria.findMany({
+        where: { id: { in: idsCat } }
+      })
+      categoriaMap = Object.fromEntries(categorias.map(c => [c.id, c]))
+    }
 
-    // Envia o erro ao front-end, com status de erro
-    // HTTP 500: Internal Server Error
+    // 5) se pediu fornecedor, carrego todos de uma vez
+    let fornecedorMap = {}
+    if (_fornecedor) {
+      const idsForn = Array.from(new Set(produtos.flatMap(p => p.fornecedor_ids)))
+      const fornecedores = await prisma.fornecedor.findMany({
+        where: { id: { in: idsForn } }
+      })
+      fornecedorMap = Object.fromEntries(fornecedores.map(f => [f.id, f]))
+    }
+
+    // 6) monto o resultado final anexando manualmente
+    const result = produtos.map(produto => ({
+      ...produto,
+      ...( _categoria  && { categoria: categoriaMap[produto.categoria_id] || null }),
+      ...( _fornecedor && { 
+        fornecedores: produto.fornecedor_ids
+          .map(id => fornecedorMap[id])
+          .filter(Boolean)
+      })
+    }))
+
+    return res.json(result)
+  }
+  catch (error) {
+    console.error(error)
     res.status(500).send(error)
   }
 }
 
 controller.retrieveOne = async function(req, res) {
   try {
-
     const include = includeRelations(req.query)
+    const { _fornecedor, _categoria, ...prismaInclude } = include
 
-    // Manda buscar o documento no servidor de BD
-    // usando como critério de busca um id informado
-    // no parâmetro da requisição
-    const result = await prisma.produto.findUnique({
-      include,
-      where: { id: req.params.id }
+    const produto = await prisma.produto.findUnique({
+      where: { id: req.params.id },
+      include: prismaInclude
     })
+    if (!produto) return res.status(404).end()
 
-    // Encontrou o documento ~> retorna HTTP 200: OK (implícito)
-    if(result) res.send(result)
-    // Não encontrou o documento ~> retorna HTTP 404: Not Found
-    else res.status(404).end()
+    let categoria = null, fornecedores = []
+    if (_categoria) {
+      categoria = await prisma.categoria.findUnique({
+        where: { id: produto.categoria_id }
+      })
+    }
+    if (_fornecedor) {
+      fornecedores = await prisma.fornecedor.findMany({
+        where: { id: { in: produto.fornecedor_ids } }
+      })
+    }
+
+    return res.json({
+      ...produto,
+      ...( _categoria  && { categoria }),
+      ...( _fornecedor && { fornecedores })
+    })
   }
-  catch(error) {
-    // Deu errado: exibe o erro no terminal
+  catch (error) {
     console.error(error)
-
-    // Envia o erro ao front-end, com status de erro
-    // HTTP 500: Internal Server Error
     res.status(500).send(error)
   }
 }
@@ -136,6 +168,7 @@ controller.update = async function(req, res) {
     }
   }
 }
+
 
 controller.delete = async function(req, res) {
   try {

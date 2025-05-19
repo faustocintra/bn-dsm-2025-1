@@ -1,30 +1,21 @@
-/*
-  Função que processa a query string da URL da requisição
-  e verifica se o parâmetro "include" foi passado. Em caso
-  positivo, preenche um objeto com os relacionamentos que
-  devem ser incluídos na consulta sendo executada
-*/
-function includeRelations(query) {
-
-    // Por padrão, não inclui nenhum relacionamento
-    const include = {}
-  
-    // Se o parâmetro "include" estiver na query string
-    if(query.include) {
-      // Recorta o valor do parâmetro, separando os
-      // relacionamentos informados onde há vírgula
-      const relations = query.include.split(',')
-  
-      //Include 2º nivel(unico caso nessa aplicação)
-      for(let rel of relations) {
-        if(rel == 'itens.produto') {
-          include.itens = {
-            include: {produto: true}}
+// lib/utils.js
+export function includeRelations(query) {
+  const include = {}
+  if (query.include) {
+    for (let rel of query.include.split(',')) {
+      if (rel === 'itens.produto') {
+        include.itens = { include: { produto: true } }
       }
-        else include[rel] = true
+      else if (rel === 'fornecedor') {
+        include._fornecedor = true
       }
-    
-      return include
+      else if (rel === 'produtos') {
+        include._produtos = true    
+      }
+      else if (rel === 'categoria') {
+        include._categoria = true    
+      }
+    }
   }
-    
-  export { includeRelations }
+  return include
+}
