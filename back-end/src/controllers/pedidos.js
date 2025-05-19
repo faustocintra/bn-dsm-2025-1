@@ -1,272 +1,227 @@
 import prisma from '../database/client.js'
 import { includeRelations } from '../lib/utils.js'
 
-const controller = {}   // Objeto vazio
+const controller = {}
 
+// POST /pedidos
 controller.create = async function(req, res) {
-  /* Conecta-se ao BD e envia uma instrução de criação
-     de um novo documento, contendo os dados que vieram
-     dentro de req.body
-  */
   try {
-    await prisma.pedido.create({ data: req.body })
+    const { num_pedido, cliente_id, itens } = req.body
 
-    // Envia uma mensagem de sucesso ao front-end
-    // HTTP 201: Created
-    res.status(201).end()
+    // Cria o pedido principal
+    const novoPedido = await prisma.pedido.create({
+      data: {
+        num_pedido,
+        cliente_id
+      }
+    })
+
+    // Cria os itens vinculados
+    await Promise.all(
+      itens.map(item =>
+        prisma.itemPedido.create({
+          data: {
+            num_item: item.num_item,
+            quantidade: item.quantidade,
+            produto_id: item.produto_id,
+            pedido_id: novoPedido.id
+          }
+        })
+      )
+    )
+
+    // Busca e retorna o pedido completo
+    const pedidoCompleto = await prisma.pedido.findUnique({
+      where: { id: novoPedido.id },
+      include: {
+        cliente: true,
+        itens: {
+          include: { produto: true }
+        }
+      }
+    })
+
+    res.status(201).json(pedidoCompleto)
   }
   catch(error) {
-    // Deu errado: exibe o erro no terminal
-    console.error(error)
-
-    // Envia o erro ao front-end, com status de erro
-    // HTTP 500: Internal Server Error
-    res.status(500).send(error)
+    console.error('Erro ao criar pedido:\n', JSON.stringify(error, null, 2))
+    res.status(500).json({
+      message: error.message,
+      code: error.code,
+      meta: error.meta
+    })
   }
 }
 
+// GET /pedidos
 controller.retrieveAll = async function(req, res) {
-
-  const include = includeRelations(req.query)
-
   try {
-    // Manda buscar os dados no servidor de BD
+    const include = includeRelations(req.query)
+
     const result = await prisma.pedido.findMany({
       include,
-      orderBy: [ { num_pedido: 'asc' } ]
+      orderBy: [{ num_pedido: 'asc' }]
     })
 
-    // Retorna os dados obtidos ao cliente com o status
-    // HTTP 200: OK (implícito)
     res.send(result)
   }
   catch(error) {
-    // Deu errado: exibe o erro no terminal
     console.error(error)
-
-    // Envia o erro ao front-end, com status de erro
-    // HTTP 500: Internal Server Error
     res.status(500).send(error)
   }
 }
 
+// GET /pedidos/:id
 controller.retrieveOne = async function(req, res) {
   try {
-
     const include = includeRelations(req.query)
 
-    // Manda buscar o documento no servidor de BD
-    // usando como critério de busca um id informado
-    // no parâmetro da requisição
     const result = await prisma.pedido.findUnique({
       include,
       where: { id: req.params.id }
     })
 
-    // Encontrou o documento ~> retorna HTTP 200: OK (implícito)
     if(result) res.send(result)
-    // Não encontrou o documento ~> retorna HTTP 404: Not Found
     else res.status(404).end()
   }
   catch(error) {
-    // Deu errado: exibe o erro no terminal
     console.error(error)
-
-    // Envia o erro ao front-end, com status de erro
-    // HTTP 500: Internal Server Error
     res.status(500).send(error)
   }
 }
 
+// PUT /pedidos/:id
 controller.update = async function(req, res) {
   try {
-    // Busca o documento pelo id passado como parâmetro e,
-    // caso o documento seja encontrado, atualiza-o com as
-    // informações passadas em req.body
     await prisma.pedido.update({
       where: { id: req.params.id },
       data: req.body
     })
 
-    // Encontrou e atualizou ~> retorna HTTP 204: No Content
     res.status(204).end()
   }
   catch(error) {
-    // P2025: erro do Prisma referente a objeto não encontrado
-    if(error?.code === 'P2025') {
-      // Não encontrou e não alterou ~> retorna HTTP 404: Not Found
-      res.status(404).end()
-    }
-    else {    // Outros tipos de erro
-      // Deu errado: exibe o erro no terminal
+    if(error?.code === 'P2025') res.status(404).end()
+    else {
       console.error(error)
-
-      // Envia o erro ao front-end, com status de erro
-      // HTTP 500: Internal Server Error
       res.status(500).send(error)
     }
   }
 }
 
+// DELETE /pedidos/:id
 controller.delete = async function(req, res) {
   try {
-    // Busca o documento a ser excluído pelo id passado
-    // como parâmetro e efetua a exclusão, caso encontrado
-    await prisma.pedido.delete({
-      where: { id: req.params.id }
+    const pedidoId = req.params.id
+
+    await prisma.itemPedido.deleteMany({
+      where: { pedido_id: pedidoId }
     })
 
-    // Encontrou e excluiu ~> retorna HTTP 204: No Content
+    await prisma.pedido.delete({
+      where: { id: pedidoId }
+    })
+
     res.status(204).end()
   }
   catch(error) {
-    // P2025: erro do Prisma referente a objeto não encontrado
-    if(error?.code === 'P2025') {
-      // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-      res.status(404).end()
-    }
-    else {    // Outros tipos de erro
-      // Deu errado: exibe o erro no terminal
+    if(error?.code === 'P2025') res.status(404).end()
+    else {
       console.error(error)
-
-      // Envia o erro ao front-end, com status de erro
-      // HTTP 500: Internal Server Error
       res.status(500).send(error)
     }
   }
 }
 
-/*----------------------------------------------------------------*/
-
+// POST /pedidos/:id/itens
 controller.createItem = async function(req, res) {
   try {
-    // Adiciona no corpo da requisição o item do pedido,
-    // passada como parâmetro na rota
     req.body.pedido_id = req.params.id
 
-    await prisma.itemVenda.create({ data: req.body })
+    await prisma.itemPedido.create({ data: req.body })
 
-    // Envia uma mensagem de sucesso ao front-end
-    // HTTP 201: Created
     res.status(201).end()
   }
   catch(error) {
-    // Deu errado: exibe o erro no terminal
     console.error(error)
-
-    // Envia o erro ao front-end, com status de erro
-    // HTTP 500: Internal Server Error
     res.status(500).send(error)
   }
 }
 
+// GET /pedidos/:id/itens
 controller.retrieveAllItems = async function(req, res) {
   try {
     const include = includeRelations(req.query)
 
-    const result = await prisma.itemVenda.findMany({
+    const result = await prisma.itemPedido.findMany({
       where: { pedido_id: req.params.id },
-      orderBy: [ { num_item: 'asc ' } ],
+      orderBy: [{ num_item: 'asc' }],
       include
     })
 
-    // HTTP 200: OK
     res.send(result)
   }
   catch(error) {
-    // Deu errado: exibe o erro no terminal
     console.error(error)
-
-    // Envia o erro ao front-end, com status de erro
-    // HTTP 500: Internal Server Error
     res.status(500).send(error)
   }
 }
 
+// GET /pedidos/:id/itens/:itemId
 controller.retrieveOneItem = async function(req, res) {
   try {
-    /*
-      A rigor, o item do pedido poderia ser encontrado apenas pelo seu id.
-      No entanto, para forçar a necessidade de um item ao pedido correspondente,
-      a busca é feita usando-se tanto o id do item quanto o id do pedido.
-    */
-    const result = await prisma.itemVenda.findFirst({
+    const result = await prisma.itemPedido.findFirst({
       where: {
         id: req.params.itemId,
         pedido_id: req.params.id
       }
     })
 
-    // Encontrou o documento ~> HTTP 200: OK (implícito)
     if(result) res.send(result)
-    // Não encontrou ~> HTTP 404: Not Found
     else res.status(404).end()
   }
   catch(error) {
-    // Deu errado: exibe o erro no terminal
     console.error(error)
-
-    // Envia o erro ao front-end, com status de erro
-    // HTTP 500: Internal Server Error
     res.status(500).send(error)
   }
 }
 
+// PUT /pedidos/:id/itens/:itemId
 controller.updateItem = async function(req, res) {
   try {
-    await prisma.itemVenda.update({
+    await prisma.itemPedido.update({
       where: {
-        id: req.params.itemId,
-        pedido_id: req.params.id
+        id: req.params.itemId
       },
       data: req.body
     })
 
-    // Encontrou e atualizou ~> HTTP 204: No Content
     res.status(204).end()
-
   }
   catch(error) {
-    // P2025: erro do Prisma referente a objeto não encontrado
-    if(error?.code === 'P2025') {
-      // Não encontrou e não alterou ~> retorna HTTP 404: Not Found
-      res.status(404).end()
-    }
-    else {    // Outros tipos de erro
-      // Deu errado: exibe o erro no terminal
+    if(error?.code === 'P2025') res.status(404).end()
+    else {
       console.error(error)
-
-      // Envia o erro ao front-end, com status de erro
-      // HTTP 500: Internal Server Error
       res.status(500).send(error)
     }
   }
 }
 
+// DELETE /pedidos/:id/itens/:itemId
 controller.deleteItem = async function(req, res) {
   try {
-    await prisma.itemVenda.delete({
+    await prisma.itemPedido.delete({
       where: {
-        id: req.params.itemId,
-        pedido_id: req.params.id
+        id: req.params.itemId
       }
     })
 
-    // Encontrou e excluiu ~> HTTP 204: No Content
     res.status(204).end()
   }
   catch(error) {
-    // P2025: erro do Prisma referente a objeto não encontrado
-    if(error?.code === 'P2025') {
-      // Não encontrou e não excluiu ~> retorna HTTP 404: Not Found
-      res.status(404).end()
-    }
-    else {    // Outros tipos de erro
-      // Deu errado: exibe o erro no terminal
+    if(error?.code === 'P2025') res.status(404).end()
+    else {
       console.error(error)
-
-      // Envia o erro ao front-end, com status de erro
-      // HTTP 500: Internal Server Error
       res.status(500).send(error)
     }
   }
