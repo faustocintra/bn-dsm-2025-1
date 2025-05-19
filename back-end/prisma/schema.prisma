@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Categoria {   
+model Categoria {   // Nomes de model com Inicial Maiúscula e no singular
   id                String      @id @default(auto()) @map("_id") @db.ObjectId
   descricao         String
   produtos          Produto[]
@@ -22,7 +22,7 @@ model Categoria {
 model Cliente {
   id                String      @id @default(auto()) @map("_id") @db.ObjectId
   nome              String
-  cpf               String      @unique   
+  cpf               String      @unique   // Não pode repetir no cadastro
   data_nascimento   DateTime?
   email             String      @unique
   logradouro        String
@@ -63,7 +63,8 @@ model ItemPedido {
   pedido_id         String        @db.ObjectId
   pedido            Pedido        @relation(fields: [pedido_id], references: [id])
 
-
+  // Índice único nos campos pedido_id e num_item para impedir
+  // a repetição do número do item dentro do mesmo pedido
   @@unique([pedido_id, num_item])
 }
 
